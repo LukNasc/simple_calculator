@@ -4,10 +4,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.ArrayList;
 
@@ -92,7 +96,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void conversion(String s) {
-        ArrayList<String> expression = new ArrayList();
+
+        //Método roubado
+
+        Expression expression = new ExpressionBuilder(s).build();
+        try{
+            String result = String.valueOf(expression.evaluate()).replace(".",",");
+            this.painel.setText(result);
+        }catch (Exception e){
+            Log.i("TAG",e.getMessage());
+        }
+
+        //Método no suor
+
+/*        ArrayList<String> expression = new ArrayList();
 
         for (int i = 0; i < s.length(); ++i) {
             String string = s.substring(i, i + 1);
@@ -125,10 +142,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         this.painel.setText((CharSequence) array.get(0));
-        this.var_aux = (String) array.get(0);
+        this.var_aux = (String) array.get(0);*/
     }
 
-    private double executarOperacao(double numero1, double numero2, String operador) {
+   /* private double executarOperacao(double numero1, double numero2, String operador) {
         double resultado = 0.0;
         if (operador.equals("+")) {
             resultado = numero1 + numero2;
@@ -141,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return resultado;
-    }
+    }*/
 
     @Override
     public void onClick(View v) {
@@ -221,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void deletar(int type) {
         if (type == 1) {
             if (var_aux.length() > 1) {
-                var_aux = var_aux.substring(1, var_aux.length());
+                var_aux = var_aux.substring(0, var_aux.length()-1);
                 painel.setText(var_aux);
             } else {
                 painel.setText("");
